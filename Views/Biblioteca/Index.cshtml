@@ -1,0 +1,58 @@
+﻿@model IEnumerable<TFI_PAD.Models.Libro>
+
+@{
+    ViewBag.Title = "Biblioteca";
+}
+
+<div class="text-center">
+    <h2>Biblioteca Universitaria</h2>
+    <table class="table-bordered table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    Titulo
+                </th>
+                <th>
+                    Autor
+                </th>
+                <th>
+                    Asignatura
+                </th>
+                <th>
+                    Profesor
+                </th>
+                <th>
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var libro in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => libro.Titulo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => libro.Autor)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => libro.Asignatura.Nombre)
+                </td>
+                <td>
+                    @Html.Label(libro.Perfil.Apellido + ", " + libro.Perfil.Nombre)
+                </td>
+                <td>
+                    @Html.ActionLink("Descargar", "Download", new { ID = libro.ID})
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    @if (ViewContext.HttpContext.User.IsInRole("Profesor")) 
+    {
+        @Html.ActionLink("Subir un Libro", "Upload", null, new { @class = "btn-primary btn" })
+    }
+</div>
+
+

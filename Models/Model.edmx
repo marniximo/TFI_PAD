@@ -1,0 +1,264 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="BibliotecaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Asignaturas">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Libros">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="IDProfesor" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CodigoAsignatura" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="ISBN" Type="varchar" MaxLength="13" Nullable="false" />
+          <Property Name="Titulo" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="Autor" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="NombreArchivo" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Login">
+          <Key>
+            <PropertyRef Name="Username" />
+          </Key>
+          <Property Name="Username" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="Profesor" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6005: The data type 'hierarchyid' is currently not supported for the target Entity Framework version; the column 'path_locator' in the table 'Biblioteca.dbo.PDF' was excluded.
+warning 6005: The data type 'hierarchyid' is currently not supported for the target Entity Framework version; the column 'parent_path_locator' in the table 'Biblioteca.dbo.PDF' was excluded.
+warning 6031: The column 'path_locator' on the table/view 'Biblioteca.dbo.PDF' was excluded, and is a key column.  The table/view has been excluded.  Please fix the entity in the schema file, and uncomment.
+        <EntityType Name="PDF">
+          <Property Name="stream_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="file_stream" Type="varbinary(max)" />
+          <Property Name="name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="file_type" Type="nvarchar" MaxLength="255" StoreGeneratedPattern="Computed" />
+          <Property Name="cached_file_size" Type="bigint" StoreGeneratedPattern="Computed" />
+          <Property Name="creation_time" Type="datetimeoffset" Precision="7" Nullable="false" />
+          <Property Name="last_write_time" Type="datetimeoffset" Precision="7" Nullable="false" />
+          <Property Name="last_access_time" Type="datetimeoffset" Precision="7" />
+          <Property Name="is_directory" Type="bit" Nullable="false" />
+          <Property Name="is_offline" Type="bit" Nullable="false" />
+          <Property Name="is_hidden" Type="bit" Nullable="false" />
+          <Property Name="is_readonly" Type="bit" Nullable="false" />
+          <Property Name="is_archive" Type="bit" Nullable="false" />
+          <Property Name="is_system" Type="bit" Nullable="false" />
+          <Property Name="is_temporary" Type="bit" Nullable="false" />
+        </EntityType>-->
+        <EntityType Name="Perfiles">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Apellido" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Telefono" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="FotoPerfil" Type="varchar(max)" />
+        </EntityType>
+        <!--Errors Found During Generation:
+error 6004: The table 'Biblioteca.dbo.PDF' is referenced by a relationship, but cannot be found.
+error 6004: The table 'Biblioteca.dbo.PDF' is referenced by a relationship, but cannot be found.
+        <Association Name="FK__PDF__parent_path__6C190EBB" />-->
+        <Association Name="FK_Asignatura_Libros">
+          <End Role="Asignaturas" Type="Self.Asignaturas" Multiplicity="1" />
+          <End Role="Libros" Type="Self.Libros" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Asignaturas">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Libros">
+              <PropertyRef Name="CodigoAsignatura" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Libros_Perfiles">
+          <End Role="Perfiles" Type="Self.Perfiles" Multiplicity="1" />
+          <End Role="Libros" Type="Self.Libros" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Perfiles">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Libros">
+              <PropertyRef Name="IDProfesor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BibliotecaModelStoreContainer">
+          <EntitySet Name="Asignaturas" EntityType="Self.Asignaturas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Libros" EntityType="Self.Libros" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Login" EntityType="Self.Login" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Perfiles" EntityType="Self.Perfiles" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Asignatura_Libros" Association="Self.FK_Asignatura_Libros">
+            <End Role="Asignaturas" EntitySet="Asignaturas" />
+            <End Role="Libros" EntitySet="Libros" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Libros_Perfiles" Association="Self.FK_Libros_Perfiles">
+            <End Role="Perfiles" EntitySet="Perfiles" />
+            <End Role="Libros" EntitySet="Libros" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BibliotecaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Asignatura">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Libros" Relationship="Self.FK_Asignatura_Libros" FromRole="Asignaturas" ToRole="Libros" />
+        </EntityType>
+        <EntityType Name="Libro">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="ISBN" Type="String" MaxLength="13" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Titulo" Type="String" MaxLength="256" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Autor" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NombreArchivo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Asignatura" Relationship="Self.FK_Asignatura_Libros" FromRole="Libros" ToRole="Asignaturas" />
+          <NavigationProperty Name="Perfil" Relationship="Self.FK_Libros_Perfiles" FromRole="Libros" ToRole="Perfiles" />
+        </EntityType>
+        <EntityType Name="Login">
+          <Key>
+            <PropertyRef Name="Username" />
+          </Key>
+          <Property Name="Username" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="256" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Profesor" Type="Byte" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Perfil">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="Username" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Apellido" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Telefono" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FotoPerfil" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Libros" Relationship="Self.FK_Libros_Perfiles" FromRole="Perfiles" ToRole="Libros" />
+        </EntityType>
+        <Association Name="FK_Asignatura_Libros">
+          <End Role="Asignaturas" Type="Self.Asignatura" Multiplicity="1" />
+          <End Role="Libros" Type="Self.Libro" Multiplicity="*" />
+        </Association>
+        <Association Name="FK_Libros_Perfiles">
+          <End Role="Perfiles" Type="BibliotecaModel.Perfil" Multiplicity="1" />
+          <End Role="Libros" Type="Self.Libro" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="BibliotecaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Asignaturas" EntityType="Self.Asignatura" />
+          <EntitySet Name="Libros" EntityType="Self.Libro" />
+          <EntitySet Name="Logins" EntityType="Self.Login" />
+          <EntitySet Name="Perfils" EntityType="BibliotecaModel.Perfil" />
+          <AssociationSet Name="FK_Asignatura_Libros" Association="Self.FK_Asignatura_Libros">
+            <End Role="Asignaturas" EntitySet="Asignaturas" />
+            <End Role="Libros" EntitySet="Libros" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Libros_Perfiles" Association="Self.FK_Libros_Perfiles">
+            <End Role="Perfiles" EntitySet="Perfils" />
+            <End Role="Libros" EntitySet="Libros" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BibliotecaModelStoreContainer" CdmEntityContainer="BibliotecaEntities">
+          <EntitySetMapping Name="Asignaturas">
+            <EntityTypeMapping TypeName="BibliotecaModel.Asignatura">
+              <MappingFragment StoreEntitySet="Asignaturas">
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Libros">
+            <EntityTypeMapping TypeName="BibliotecaModel.Libro">
+              <MappingFragment StoreEntitySet="Libros">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+                <ScalarProperty Name="Titulo" ColumnName="Titulo" />
+                <ScalarProperty Name="Autor" ColumnName="Autor" />
+                <ScalarProperty Name="NombreArchivo" ColumnName="NombreArchivo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Logins">
+            <EntityTypeMapping TypeName="BibliotecaModel.Login">
+              <MappingFragment StoreEntitySet="Login">
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Profesor" ColumnName="Profesor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Perfils">
+            <EntityTypeMapping TypeName="BibliotecaModel.Perfil">
+              <MappingFragment StoreEntitySet="Perfiles">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="FotoPerfil" ColumnName="FotoPerfil" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="FK_Asignatura_Libros" TypeName="BibliotecaModel.FK_Asignatura_Libros" StoreEntitySet="Libros">
+            <EndProperty Name="Asignaturas">
+              <ScalarProperty Name="Codigo" ColumnName="CodigoAsignatura" />
+            </EndProperty>
+            <EndProperty Name="Libros">
+              <ScalarProperty Name="ID" ColumnName="ID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="FK_Libros_Perfiles" TypeName="BibliotecaModel.FK_Libros_Perfiles" StoreEntitySet="Libros">
+            <EndProperty Name="Perfiles">
+              <ScalarProperty Name="ID" ColumnName="IDProfesor" />
+            </EndProperty>
+            <EndProperty Name="Libros">
+              <ScalarProperty Name="ID" ColumnName="ID" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="false" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

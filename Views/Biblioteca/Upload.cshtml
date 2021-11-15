@@ -1,0 +1,72 @@
+﻿@model TFI_PAD.Models.Libro
+
+@{
+    ViewBag.Title = "Upload";
+}
+
+<h2>Upload</h2>
+<form enctype="multipart/form-data" method="post" action="UploadFiles" id="ajaxUploadForm" novalidate="novalidate">
+
+    <fieldset>
+        <legend style="padding-top: 10px; padding-bottom: 10px;">Uploaded Form</legend>
+
+        <div class="col-xs-12" style="padding: 10px;">
+            <div class="col-xs-4">
+                <label>Titulo</label>
+            </div>
+            <div class="col-xs-7">
+                @Html.EditorFor(model => model.Titulo)
+            </div>
+        </div>
+
+        <div class="col-xs-12" style="padding: 10px;">
+            <div class="col-xs-4">
+                <label>Autor</label>
+            </div>
+            <div class="col-xs-7">
+                @Html.EditorFor(model => model.Autor)
+            </div>
+        </div>
+
+        <div class="col-xs-12" style="padding: 10px;">
+            <div class="col-xs-4">
+                <label>Asignatura</label>
+            </div>
+            <div class="col-xs-7">
+                @Html.DropDownListFor(model => model.Asignatura, ViewBag.Asignaturas as SelectList, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="col-xs-12" style="padding: 10px;">
+            <div class="col-xs-4">
+                <label>ISBN</label>
+            </div>
+            <div class="col-xs-7">
+                @Html.EditorFor(model => model.ISBN)
+            </div>
+        </div>
+
+        <input id="Username" name="Username" value="@User.Identity.Name.Split(':')[1]" hidden>
+
+        <div class="col-xs-12" style="padding: 10px;">
+            <div class="col-xs-4">
+                <label>Upload</label>
+            </div>
+            <div class="col-xs-7">
+                <input type="file" id="file" name="file">
+            </div>
+        </div>
+
+        <div class="col-xs-12" style="padding: 10px;">
+            <div class="col-xs-4">
+                <input type="submit" value="Upload" id="ajaxUploadButton" class="btn">
+            </div>
+            <div class="col-xs-7">
+
+            </div>
+        </div>
+
+    </fieldset>
+
+</form>
+
