@@ -8,122 +8,65 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using TFI_PAD.Models;
+using System.IO;
+using System.Configuration;
 
 namespace TFI_PAD.Controllers
 {
+    [Authorize]
     public class PerfilController : Controller
     {
         private BibliotecaEntities db = new BibliotecaEntities();
+        const int BUFFER_SIZE = 1024; 
 
-        // GET: Perfils
-        public async Task<ActionResult> Index()
+        public ActionResult Edit()
         {
-            return View(await db.Perfils.ToListAsync());
-        }
-
-        // GET: Perfils/Details/5
-        public async Task<ActionResult> Details(Guid? id)
-        {
-            if (id == null)
+            var user = System.Web.HttpContext.Current.User.Identity.Name.Split(':')[1];
+            if (string.IsNullOrEmpty(user))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Perfil perfil = await db.Perfils.FindAsync(id);
+            Perfil perfil = db.Perfils.FirstOrDefault(p=>p.Username == user);
             if (perfil == null)
             {
                 return HttpNotFound();
             }
+            var path = Path.Combine(ConfigurationManager.AppSettings["Imagenes"], perfil.ID.ToString());
+            if (System.IO.File.Exists(path))
+            {
+                string foto = Convert.ToBase64String(System.IO.File.ReadAllBytes(path));
+                ViewBag.FotoPerfil = foto;
+            }
+            else
+            {
+                string foto = Convert.ToBase64String(System.IO.File.ReadAllBytes(Path.Combine(ConfigurationManager.AppSettings["Imagenes"], "DEFAULT.png")));
+                ViewBag.FotoPerfil = foto;
+            }
             return View(perfil);
         }
 
-        // GET: Perfils/Create
-        public ActionResult Create()
+        [NonAction]
+        private async Task SaveAsAsync(HttpPostedFileBase file, string filePath)
         {
-            return View();
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.InputStream.CopyToAsync(stream);
+            }
         }
 
-        // POST: Perfils/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ID,Username,Nombre,Apellido,Telefono,Email,FotoPerfil")] Perfil perfil)
+        public async Task<ActionResult> Edit(Perfil perfil, HttpPostedFileBase imagen)
         {
-            if (ModelState.IsValid)
-            {
-                perfil.ID = Guid.NewGuid();
-                db.Perfils.Add(perfil);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+            if (imagen != null) {
+                var path = Path.Combine(ConfigurationManager.AppSettings["Imagenes"], perfil.ID.ToString());
+                await SaveAsAsync(imagen, path);
             }
-
-            return View(perfil);
-        }
-
-        // GET: Perfils/Edit/5
-        public async Task<ActionResult> Edit(Guid? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Perfil perfil = await db.Perfils.FindAsync(id);
-            if (perfil == null)
-            {
-                return HttpNotFound();
-            }
-            return View(perfil);
-        }
-
-        // POST: Perfils/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,Username,Nombre,Apellido,Telefono,Email,FotoPerfil")] Perfil perfil)
-        {
             if (ModelState.IsValid)
             {
                 db.Entry(perfil).State = EntityState.Modified;
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
             }
-            return View(perfil);
-        }
-
-        // GET: Perfils/Delete/5
-        public async Task<ActionResult> Delete(Guid? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Perfil perfil = await db.Perfils.FindAsync(id);
-            if (perfil == null)
-            {
-                return HttpNotFound();
-            }
-            return View(perfil);
-        }
-
-        // POST: Perfils/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(Guid id)
-        {
-            Perfil perfil = await db.Perfils.FindAsync(id);
-            db.Perfils.Remove(perfil);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
+            return RedirectToAction("Index", "Biblioteca");
         }
     }
 }

@@ -178,6 +178,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PerfilController.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -251,6 +252,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\SignUp.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -266,15 +268,11 @@
     <Content Include="Views\Biblioteca\Index.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Biblioteca\Upload.cshtml" />
-    <Content Include="Views\Perfils\Create.cshtml" />
-    <Content Include="Views\Perfils\Delete.cshtml" />
-    <Content Include="Views\Perfils\Details.cshtml" />
-    <Content Include="Views\Perfils\Edit.cshtml" />
-    <Content Include="Views\Perfils\Index.cshtml" />
+    <Content Include="Views\Perfil\Edit.cshtml" />
+    <Content Include="Views\Login\SignUp.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Perfil\" />
     <Folder Include="Views\Profile\" />
   </ItemGroup>
   <ItemGroup>

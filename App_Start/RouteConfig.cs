@@ -18,6 +18,11 @@ namespace TFI_PAD
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Biblioteca", action = "Index", id = UrlParameter.Optional }
             );
+            routes.MapRoute(
+                name: "Home",
+                url: "",
+                defaults: new { controller = "Biblioteca", action = "Index" }
+            );
         }
     }
 }

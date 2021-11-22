@@ -14,6 +14,11 @@ namespace TFI_PAD.Controllers
         // GET: Login
         public ActionResult Login()
         {
+            ViewBag.Mensaje = "";
+            return View();
+        }
+
+        public ActionResult SignUp() {
             return View();
         }
 
@@ -38,9 +43,51 @@ namespace TFI_PAD.Controllers
             ModelState.AddModelError("InvalidLogin", "Contraseña o Usuario invalido");
             return View();
         }
+        [HttpPost]
+        public ActionResult SignUp(
+            string username, 
+            string password, 
+            string confirm, 
+            string nombre, 
+            string apellido, 
+            string correo, 
+            string telefono
+        )
+        {
+            var valido = ValidarPassword(password, confirm);
+            if (!valido) {
+                ModelState.AddModelError("NoCoincide", "Las contraseñas deben ser iguales!");
+                ViewBag.username = username;
+                return View();
+            }
+            var login = new Login()
+            {
+                Username = username,
+                Password = password,
+            };
+            var perfil = new Perfil()
+            {
+                Apellido = apellido,
+                Nombre = nombre,
+                Email = correo,
+                ID = Guid.NewGuid(),
+                Telefono = telefono,
+                Username = username,
+            };
+            _context.Logins.Add(login);
+            _context.Perfils.Add(perfil);
+            _context.SaveChanges();
+            ViewBag.Mensaje = "Tu cuenta fue creada con exito";
+            return RedirectToAction("Index", "Biblioteca", "");
+        }
 
-        [NonAction]
-        public void SignIn(string username, bool createPersistentCookie)
+        public ActionResult Salir()
+        {
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Login");
+        }
+
+        private void SignIn(string username, bool createPersistentCookie)
         {
             var now = DateTime.UtcNow.ToLocalTime();
             TimeSpan expirationTimeSpan = FormsAuthentication.Timeout;
@@ -76,10 +123,8 @@ namespace TFI_PAD.Controllers
             Response.Cookies.Add(cookie);
         }
 
-        public ActionResult Logout()
-        {
-            FormsAuthentication.SignOut();
-            return RedirectToAction("Login");
+        private bool ValidarPassword(string password, string confirm) {
+            return password == confirm && password.Length >=8;
         }
     }
 }

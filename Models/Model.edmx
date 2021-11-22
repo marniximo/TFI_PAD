@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="BibliotecaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="BibliotecaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Asignaturas">
           <Key>
             <PropertyRef Name="Codigo" />
@@ -32,27 +32,6 @@
           <Property Name="Password" Type="varchar" MaxLength="256" Nullable="false" />
           <Property Name="Profesor" Type="tinyint" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6005: The data type 'hierarchyid' is currently not supported for the target Entity Framework version; the column 'path_locator' in the table 'Biblioteca.dbo.PDF' was excluded.
-warning 6005: The data type 'hierarchyid' is currently not supported for the target Entity Framework version; the column 'parent_path_locator' in the table 'Biblioteca.dbo.PDF' was excluded.
-warning 6031: The column 'path_locator' on the table/view 'Biblioteca.dbo.PDF' was excluded, and is a key column.  The table/view has been excluded.  Please fix the entity in the schema file, and uncomment.
-        <EntityType Name="PDF">
-          <Property Name="stream_id" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="file_stream" Type="varbinary(max)" />
-          <Property Name="name" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="file_type" Type="nvarchar" MaxLength="255" StoreGeneratedPattern="Computed" />
-          <Property Name="cached_file_size" Type="bigint" StoreGeneratedPattern="Computed" />
-          <Property Name="creation_time" Type="datetimeoffset" Precision="7" Nullable="false" />
-          <Property Name="last_write_time" Type="datetimeoffset" Precision="7" Nullable="false" />
-          <Property Name="last_access_time" Type="datetimeoffset" Precision="7" />
-          <Property Name="is_directory" Type="bit" Nullable="false" />
-          <Property Name="is_offline" Type="bit" Nullable="false" />
-          <Property Name="is_hidden" Type="bit" Nullable="false" />
-          <Property Name="is_readonly" Type="bit" Nullable="false" />
-          <Property Name="is_archive" Type="bit" Nullable="false" />
-          <Property Name="is_system" Type="bit" Nullable="false" />
-          <Property Name="is_temporary" Type="bit" Nullable="false" />
-        </EntityType>-->
         <EntityType Name="Perfiles">
           <Key>
             <PropertyRef Name="ID" />
@@ -63,12 +42,7 @@ warning 6031: The column 'path_locator' on the table/view 'Biblioteca.dbo.PDF' w
           <Property Name="Apellido" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="Telefono" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="255" Nullable="false" />
-          <Property Name="FotoPerfil" Type="varchar(max)" />
         </EntityType>
-        <!--Errors Found During Generation:
-error 6004: The table 'Biblioteca.dbo.PDF' is referenced by a relationship, but cannot be found.
-error 6004: The table 'Biblioteca.dbo.PDF' is referenced by a relationship, but cannot be found.
-        <Association Name="FK__PDF__parent_path__6C190EBB" />-->
         <Association Name="FK_Asignatura_Libros">
           <End Role="Asignaturas" Type="Self.Asignaturas" Multiplicity="1" />
           <End Role="Libros" Type="Self.Libros" Multiplicity="*" />
@@ -107,8 +81,7 @@ error 6004: The table 'Biblioteca.dbo.PDF' is referenced by a relationship, but 
             <End Role="Libros" EntitySet="Libros" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="BibliotecaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -150,7 +123,6 @@ error 6004: The table 'Biblioteca.dbo.PDF' is referenced by a relationship, but 
           <Property Name="Apellido" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Telefono" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="FotoPerfil" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Libros" Relationship="Self.FK_Libros_Perfiles" FromRole="Perfiles" ToRole="Libros" />
         </EntityType>
         <Association Name="FK_Asignatura_Libros">
@@ -218,7 +190,6 @@ error 6004: The table 'Biblioteca.dbo.PDF' is referenced by a relationship, but 
                 <ScalarProperty Name="Apellido" ColumnName="Apellido" />
                 <ScalarProperty Name="Telefono" ColumnName="Telefono" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="FotoPerfil" ColumnName="FotoPerfil" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -252,7 +223,7 @@ error 6004: The table 'Biblioteca.dbo.PDF' is referenced by a relationship, but 
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="false" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />

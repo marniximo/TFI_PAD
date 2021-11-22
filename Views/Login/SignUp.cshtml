@@ -1,0 +1,83 @@
+﻿@{
+    ViewBag.Title = "Registro";
+}
+<link href="@Url.Content("~/Content/Login.css")" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="~/Scripts/SignUp.js"></script>
+
+<form action="/Login/SignUp" method="post" onsubmit="return validarRegistro()">
+    <div class="card custom-card">
+        <div class="card-header bg-primary text-white login-header">
+            <h3>Registro de Usuarios</h3>
+        </div>
+        <div class="card-body">
+            <div class="col-xs-12" style="padding: 10px;">
+                <div class="col-xs-4">
+                    <label>Legajo Usuario / Codigo Docente</label>
+                </div>
+                <div class="col-xs-7">
+                    <input id="username" name="username" required>
+                </div>
+            </div>
+            <div class="col-xs-12" style="padding: 10px;">
+                <div class="col-xs-4">
+                    <label>Contraseña</label>
+                </div>
+                <div class="col-xs-7">
+                    <input type="password" id="password" name="password" required>
+                </div>
+            </div>
+            <div class="col-xs-12" style="padding: 10px;">
+                <div class="col-xs-4">
+                    <label>Confirmar Contraseña</label>
+                </div>
+                <div class="col-xs-7">
+                    <input type="password" id="confirm" name="confirm" required>
+                </div>
+            </div>
+            <div class="col-xs-12" style="padding: 10px;">
+                <div class="col-xs-4">
+                    <label>Nombre</label>
+                </div>
+                <div class="col-xs-7">
+                    <input id="nombre" name="nombre" required>
+                </div>
+            </div>
+            <div class="col-xs-12" style="padding: 10px;">
+                <div class="col-xs-4">
+                    <label>Apellido</label>
+                </div>
+                <div class="col-xs-7">
+                    <input id="apellido" name="apellido" required>
+                </div>
+            </div>
+            <div class="col-xs-12" style="padding: 10px;">
+                <div class="col-xs-4">
+                    <label>Numero de Telefono</label>
+                </div>
+                <div class="col-xs-7">
+                    <input id="telefono" name="telefono" required>
+                </div>
+            </div>
+            <div class="col-xs-12" style="padding: 10px;">
+                <div class="col-xs-4">
+                    <label>Correo Electronico</label>
+                </div>
+                <div class="col-xs-7">
+                    <input id="correo" name="correo" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary rounded-0">Crear Cuenta</button>
+            </div>
+
+        </div>
+    </div>
+</form>
+<div class="bg-danger text-white">
+    <h3>
+        @Html.ValidationMessage("NoCoincide")
+    </h3>
+    <h3 id="error"/>
+</div>
+

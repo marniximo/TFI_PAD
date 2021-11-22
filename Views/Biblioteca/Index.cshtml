@@ -6,6 +6,17 @@
 
 <div class="text-center">
     <h2>Biblioteca Universitaria</h2>
+    <div>
+        <div class="row">
+            <div class="col-xs-8">
+                <input id="filtro" placeholder="Filtrar libros" class="width-fill">
+            </div>
+            <div class="col-xs-4">
+                @Html.ActionLink("Filtrar", "Filtrar", new { filtro = "filtroplaceholder"}, new { @class = "btn-primary btn", id = "linkFiltro"})
+            </div>
+        </div>
+    </div>
+    <br />
     <table class="table-bordered table table-striped">
         <thead>
             <tr>
@@ -24,6 +35,13 @@
                 <th>
 
                 </th>
+                @if (ViewContext.HttpContext.User.IsInRole("Profesor"))
+                {
+                    <th>
+
+                    </th>
+                }
+                
             </tr>
         </thead>
         <tbody>
@@ -43,8 +61,14 @@
                     @Html.Label(libro.Perfil.Apellido + ", " + libro.Perfil.Nombre)
                 </td>
                 <td>
-                    @Html.ActionLink("Descargar", "Download", new { ID = libro.ID})
+                    @Html.ActionLink("Descargar", "Download", new { ID = libro.ID })
                 </td>
+                @if (ViewContext.HttpContext.User.IsInRole("Profesor") && ViewContext.HttpContext.User.Identity.Name.Split(':')[1] == libro.Perfil.Username)
+                {
+                    <td>
+                        @Html.ActionLink("Eliminar", "Eliminar", new { ID = libro.ID })
+                    </td>
+                }
             </tr>
             }
         </tbody>
@@ -54,5 +78,15 @@
         @Html.ActionLink("Subir un Libro", "Upload", null, new { @class = "btn-primary btn" })
     }
 </div>
+
+<script>
+    let link = $('#linkFiltro');
+    link.on('click', () => {
+        var filtro = $("#filtro").val();
+        var oldLink = link.attr('href')
+        console.log(oldLink);
+        link.attr('href', oldLink.replace("filtroplaceholder", filtro))
+    });
+</script>
 
 
