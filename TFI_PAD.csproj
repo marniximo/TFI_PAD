@@ -185,7 +185,6 @@
     <Compile Include="Models\Asignatura.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FileDescriptionShort.cs" />
     <Compile Include="Models\Libro.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>

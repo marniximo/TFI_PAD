@@ -17,7 +17,6 @@ namespace TFI_PAD.Controllers
     public class PerfilController : Controller
     {
         private BibliotecaEntities db = new BibliotecaEntities();
-        const int BUFFER_SIZE = 1024; 
 
         public ActionResult Edit()
         {
