@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using TFI_PAD.Models;
 
@@ -21,6 +22,22 @@ namespace TFI_PAD.Controllers
         public ActionResult Index()
         {
             return View(_context.Libros.ToList());
+        }
+
+        public ActionResult Estadisticas(Guid ID) {
+            var libro = _context.Libros.Find(ID);
+            if (HttpContext.User.Identity.Name.Split(':')[1] != libro.Perfil.Username)
+            {
+                return RedirectToAction("Index");
+            }
+            var visitas = _context.Visitas.Where(v => v.Libro.ID == ID);
+            var usuariosNoVisita = _context.Perfils.Where(p => !visitas.Select(v => v.Perfil).Contains(p)).ToList();
+            ViewBag.UsuariosNoVisita = usuariosNoVisita;
+            return View(libro);
+        }
+
+        public ActionResult Chart(int visitas, int noVisitas) {
+            return PartialView(new int[] { noVisitas, visitas});
         }
 
         public ActionResult Filtrar(string filtro)
@@ -93,9 +110,25 @@ namespace TFI_PAD.Controllers
             return RedirectToAction("Index", "Biblioteca");
         }
 
+        [NonAction]
+        public void RegistrarVisita(Perfil perfil, Libro libro) {
+            var visita = _context.Visitas.FirstOrDefault(v => v.Perfil.ID == perfil.ID && v.Libro.ID == libro.ID);
+            if (visita == null)
+            {
+                _context.Visitas.Add(new Visita { ID = Guid.NewGuid(), CantidadVisitas = 1, Libro = libro, Perfil = perfil });
+            }
+            else {
+                visita.CantidadVisitas ++;
+            }
+            _context.SaveChanges();
+        }
+
         public FileStreamResult Download(Guid ID) 
         {
+            var username = System.Web.HttpContext.Current.User.Identity.Name.Split(':')[1];
+            var perfil = _context.Perfils.First(p => p.Username == username);
             var libro = _context.Libros.First(l => l.ID == ID);
+            RegistrarVisita(perfil, libro);
             var path = Path.Combine(ConfigurationManager.AppSettings["PDFFolder"], libro.NombreArchivo);
             var stream = new FileStream(path, FileMode.Open);
             return File(stream, "application/pdf");

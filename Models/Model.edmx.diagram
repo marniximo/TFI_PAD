@@ -11,6 +11,9 @@
         <EntityTypeShape EntityType="BibliotecaModel.Perfil" Width="1.5" PointX="0.75" PointY="4.875" IsExpanded="true" />
         <AssociationConnector Association="BibliotecaModel.FK_Asignatura_Libros" ManuallyRouted="false" />
         <AssociationConnector Association="BibliotecaModel.FK_Libros_Perfiles" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="BibliotecaModel.Visita" Width="1.5" PointX="5.25" PointY="3.375" />
+        <AssociationConnector Association="BibliotecaModel.FK_Visitas_Libros" />
+        <AssociationConnector Association="BibliotecaModel.FK_Visitas_Perfiles" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -1,0 +1,10 @@
+﻿@model int[]
+@{
+    var myChart = new Chart(width: 600, height: 400)
+        .AddTitle("Visitas del libro")
+        .AddSeries(
+            name: "Visitas", chartType: "Pie",
+            xValue: new[] { "Usuarios que no vieron el libro", "Visitas unicas" },
+            yValues: new[] { Model[0], Model[1] })
+        .Write();
+}

@@ -18,6 +18,7 @@ namespace TFI_PAD.Models
         public Perfil()
         {
             this.Libros = new HashSet<Libro>();
+            this.Visitas = new HashSet<Visita>();
         }
     
         public System.Guid ID { get; set; }
@@ -29,5 +30,7 @@ namespace TFI_PAD.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Libro> Libros { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Visita> Visitas { get; set; }
     }
 }

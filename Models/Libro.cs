@@ -14,6 +14,12 @@ namespace TFI_PAD.Models
     
     public partial class Libro
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Libro()
+        {
+            this.Visitas = new HashSet<Visita>();
+        }
+    
         public System.Guid ID { get; set; }
         public string ISBN { get; set; }
         public string Titulo { get; set; }
@@ -22,5 +28,7 @@ namespace TFI_PAD.Models
     
         public virtual Asignatura Asignatura { get; set; }
         public virtual Perfil Perfil { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Visita> Visitas { get; set; }
     }
 }

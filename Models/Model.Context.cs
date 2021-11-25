@@ -29,5 +29,6 @@ namespace TFI_PAD.Models
         public virtual DbSet<Libro> Libros { get; set; }
         public virtual DbSet<Login> Logins { get; set; }
         public virtual DbSet<Perfil> Perfils { get; set; }
+        public virtual DbSet<Visita> Visitas { get; set; }
     }
 }

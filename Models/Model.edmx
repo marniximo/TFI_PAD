@@ -43,6 +43,15 @@
           <Property Name="Telefono" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="255" Nullable="false" />
         </EntityType>
+        <EntityType Name="Visitas">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="IDPerfil" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="IDLibro" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CantidadVisitas" Type="int" Nullable="false" />
+        </EntityType>
         <Association Name="FK_Asignatura_Libros">
           <End Role="Asignaturas" Type="Self.Asignaturas" Multiplicity="1" />
           <End Role="Libros" Type="Self.Libros" Multiplicity="*" />
@@ -67,11 +76,36 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Visitas_Libros">
+          <End Role="Libros" Type="Self.Libros" Multiplicity="1" />
+          <End Role="Visitas" Type="Self.Visitas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Libros">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Visitas">
+              <PropertyRef Name="IDLibro" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Visitas_Perfiles">
+          <End Role="Perfiles" Type="Self.Perfiles" Multiplicity="1" />
+          <End Role="Visitas" Type="Self.Visitas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Perfiles">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Visitas">
+              <PropertyRef Name="IDPerfil" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="BibliotecaModelStoreContainer">
           <EntitySet Name="Asignaturas" EntityType="Self.Asignaturas" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Libros" EntityType="Self.Libros" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Login" EntityType="Self.Login" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Perfiles" EntityType="Self.Perfiles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Visitas" EntityType="Self.Visitas" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Asignatura_Libros" Association="Self.FK_Asignatura_Libros">
             <End Role="Asignaturas" EntitySet="Asignaturas" />
             <End Role="Libros" EntitySet="Libros" />
@@ -79,6 +113,14 @@
           <AssociationSet Name="FK_Libros_Perfiles" Association="Self.FK_Libros_Perfiles">
             <End Role="Perfiles" EntitySet="Perfiles" />
             <End Role="Libros" EntitySet="Libros" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Visitas_Libros" Association="Self.FK_Visitas_Libros">
+            <End Role="Libros" EntitySet="Libros" />
+            <End Role="Visitas" EntitySet="Visitas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Visitas_Perfiles" Association="Self.FK_Visitas_Perfiles">
+            <End Role="Perfiles" EntitySet="Perfiles" />
+            <End Role="Visitas" EntitySet="Visitas" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -104,6 +146,7 @@
           <Property Name="NombreArchivo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Asignatura" Relationship="Self.FK_Asignatura_Libros" FromRole="Libros" ToRole="Asignaturas" />
           <NavigationProperty Name="Perfil" Relationship="Self.FK_Libros_Perfiles" FromRole="Libros" ToRole="Perfiles" />
+          <NavigationProperty Name="Visitas" Relationship="BibliotecaModel.FK_Visitas_Libros" FromRole="Libro" ToRole="Visitas" />
         </EntityType>
         <EntityType Name="Login">
           <Key>
@@ -124,6 +167,7 @@
           <Property Name="Telefono" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Libros" Relationship="Self.FK_Libros_Perfiles" FromRole="Perfiles" ToRole="Libros" />
+          <NavigationProperty Name="Visitas" Relationship="BibliotecaModel.FK_Visitas_Perfiles" FromRole="Perfil" ToRole="Visitas" />
         </EntityType>
         <Association Name="FK_Asignatura_Libros">
           <End Role="Asignaturas" Type="Self.Asignatura" Multiplicity="1" />
@@ -146,7 +190,33 @@
             <End Role="Perfiles" EntitySet="Perfils" />
             <End Role="Libros" EntitySet="Libros" />
           </AssociationSet>
+          <EntitySet Name="Visitas" EntityType="BibliotecaModel.Visita" />
+          <AssociationSet Name="FK_Visitas_Libros" Association="BibliotecaModel.FK_Visitas_Libros">
+            <End Role="Libro" EntitySet="Libros" />
+            <End Role="Visitas" EntitySet="Visitas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Visitas_Perfiles" Association="BibliotecaModel.FK_Visitas_Perfiles">
+            <End Role="Perfil" EntitySet="Perfils" />
+            <End Role="Visitas" EntitySet="Visitas" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Visita">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="CantidadVisitas" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Libro" Relationship="BibliotecaModel.FK_Visitas_Libros" FromRole="Visitas" ToRole="Libro" />
+          <NavigationProperty Name="Perfil" Relationship="BibliotecaModel.FK_Visitas_Perfiles" FromRole="Visitas" ToRole="Perfil" />
+        </EntityType>
+        <Association Name="FK_Visitas_Libros">
+          <End Type="BibliotecaModel.Libro" Role="Libro" Multiplicity="1" />
+          <End Type="BibliotecaModel.Visita" Role="Visitas" Multiplicity="*" />
+        </Association>
+        <Association Name="FK_Visitas_Perfiles">
+          <End Type="BibliotecaModel.Perfil" Role="Perfil" Multiplicity="1" />
+          <End Type="BibliotecaModel.Visita" Role="Visitas" Multiplicity="*" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -207,6 +277,30 @@
             </EndProperty>
             <EndProperty Name="Libros">
               <ScalarProperty Name="ID" ColumnName="ID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="Visitas">
+            <EntityTypeMapping TypeName="BibliotecaModel.Visita">
+              <MappingFragment StoreEntitySet="Visitas">
+                <ScalarProperty Name="CantidadVisitas" ColumnName="CantidadVisitas" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="FK_Visitas_Libros" TypeName="BibliotecaModel.FK_Visitas_Libros" StoreEntitySet="Visitas">
+            <EndProperty Name="Visitas">
+              <ScalarProperty Name="ID" ColumnName="ID" />
+            </EndProperty>
+            <EndProperty Name="Libro">
+              <ScalarProperty Name="ID" ColumnName="IDLibro" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="FK_Visitas_Perfiles" TypeName="BibliotecaModel.FK_Visitas_Perfiles" StoreEntitySet="Visitas">
+            <EndProperty Name="Visitas">
+              <ScalarProperty Name="ID" ColumnName="ID" />
+            </EndProperty>
+            <EndProperty Name="Perfil">
+              <ScalarProperty Name="ID" ColumnName="IDPerfil" />
             </EndProperty>
           </AssociationSetMapping>
         </EntityContainerMapping>

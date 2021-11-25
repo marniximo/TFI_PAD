@@ -1,0 +1,31 @@
+﻿@model TFI_PAD.Models.Libro
+
+@{
+    ViewBag.Title = "Estadisticas";
+}
+
+<div class="text-center">
+    <h2>Estadisticas</h2>
+
+    <h3>Cantidad de visitas unicas del libro: @Model.Visitas.Count</h3>
+
+    <img src="@Url.Action("Chart", new { visitas = Model.Visitas.Count, noVisitas = ViewBag.UsuariosNoVisita.Count })"/>
+
+    <h3>Usuarios que no vieron el libro: @ViewBag.UsuariosNoVisita.Count</h3>
+
+    <table class="table-bordered table table-striped">
+
+        @foreach (var usuario in (List<TFI_PAD.Models.Perfil>)ViewBag.UsuariosNoVisita)
+        {
+            <tr>
+                <td>
+                    @Html.Label($"{usuario.Apellido}, {usuario.Nombre} - {usuario.Username}")
+                </td>
+            </tr>
+        }
+    </table>
+
+</div>
+
+
+
